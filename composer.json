@@ -9,7 +9,11 @@
             "email": "paco_vu@yahoo.com"
         }
     ],
-    "minimum-stability": "stable",
+    "require": {
+      "ext-curl": "*",
+      "ext-json": "*",
+      "php": ">=7.1"
+    },
     "autoload": {
         "psr-4": {"pacovu\\engagevoice\\": "src/"}
     },

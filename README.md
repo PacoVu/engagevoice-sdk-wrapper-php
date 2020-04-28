@@ -13,7 +13,7 @@ Engage Voice SDK Wrapper for Node is a utility class, which helps you easily int
 
 1. To install the latest version directly from this github repo:
 ```
-$ php composer.phar require engagevoice-sdk-wrapper
+$ composer require pacovu/engagevoice-sdk-wrapper
 ```
 
 ----
