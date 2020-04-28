@@ -1,0 +1,14 @@
+{
+    "name": "ringcentral/engagevoice-sdk-wrapper",
+    "description": "RingCentral Engage Voice SDK wrapper for PHP",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "PacoVu",
+            "email": "paco_vu@yahoo.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
