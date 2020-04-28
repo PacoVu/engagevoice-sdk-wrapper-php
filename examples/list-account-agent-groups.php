@@ -1,5 +1,5 @@
 <?php
-require('../src/EngageVoiceSDKWrapper.php');
+require('vendor/autoload.php');
 
 const RC_CLIENT_ID="";
 const RC_CLIENT_SECRET="";
