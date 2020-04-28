@@ -18,14 +18,15 @@ class RestClient {
     private $accountId = null;
     private $accountInfo = null;
 
-    public function __construct($clientId=null, $clientSecret=null, $mode="Engage") {
-        $this->mode = $mode;
-        if ($this->mode == "Engage"){
+    public function __construct($clientId=null, $clientSecret=null) {
+        if ($clientId == null || $clientSecret == null){
+          $this->server = self::LEGACY_SERVER_AND_PATH;
+          $this->mode = "Legacy";
+        }else{
           $this->server = self::EV_SERVER_AND_PATH;
           $this->clientId = $clientId;
           $this->clientSecret = $clientSecret;
-        }else{
-          $this->server = self::LEGACY_SERVER_AND_PATH;
+          $this->mode = "Engage";
         }
     }
 
