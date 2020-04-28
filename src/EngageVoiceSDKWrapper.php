@@ -1,5 +1,5 @@
 <?php
-namespace SDKWrapper;
+namespace EngageVoiceSDKWrapper;
 
 class RestClient {
     const RC_TOKEN_FILE = "rc_tokens.txt";
