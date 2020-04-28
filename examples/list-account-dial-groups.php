@@ -1,5 +1,5 @@
 <?php
-require('../src/engagevoice_sdk_wrapper.php');
+require('../src/EngageVoiceSDKWrapper.php');
 
 const RC_CLIENT_ID="";
 const RC_CLIENT_SECRET="";
@@ -8,7 +8,7 @@ const RC_USERNAME="";
 const RC_PASSWORD="";
 const RC_EXTENSION="";
 
-$ev = new engagevoice\RestClient(RC_CLIENT_ID, RC_CLIENT_SECRET);
+$ev = new EngageVoiceSDKWrapper\RestClient(RC_CLIENT_ID, RC_CLIENT_SECRET);
 try{
     $ev->login(RC_USERNAME, RC_PASSWORD, RC_EXTENSION, function($response){
       get_account_dial_groups();

@@ -10,11 +10,9 @@
         }
     ],
     "require": {
-      "ext-curl": "*",
-      "ext-json": "*",
       "php": ">=7.1"
     },
     "autoload": {
-        "psr-4": {"pacovu\\engagevoice\\": "src/"}
+        "psr-4": {"EngageVoiceSDKWrapper": "src/"}
     }
 }

@@ -1,16 +1,16 @@
 <?php
-namespace engagevoice;
+namespace EngageVoiceSDKWrapper;
 
 class RestClient {
     const RC_TOKEN_FILE = "rc_tokens.txt";
 
-    private $mode = "";
     const RC_SERVER_URL = "https://platform.ringcentral.com";
     const EV_SERVER_URL = "https://engage.ringcentral.com";
     const EV_SERVER_AND_PATH = "https://engage.ringcentral.com/voice/api/v1/";
 
     const LEGACY_SERVER_AND_PATH = "https://portal.vacd.biz/api/v1/";
 
+    private $mode = "";
     private $server = "";
     private $clientId = "";
     private $clientSecret = "";
@@ -66,7 +66,7 @@ class RestClient {
                   $this->accountInfo = $tokensObj->agentDetails;
                   $this->accountId = $tokensObj->agentDetails[0]->accountId;
                   return ($callback == null) ? $tokensObj : $callback($resp);
-              }catch (Exception $e) {
+              }catch (\Exception $e) {
                   throw $e;
               }
           }
@@ -140,10 +140,10 @@ class RestClient {
             try {
                 $resp = $this->__post($url, $headers, $body);
                 return ($callback == "") ? $resp['body'] : $callback($resp);
-            }catch (Exception $e) {
+            }catch (\Exception $e) {
                 throw $e;
             }
-        }catch (Exception $e) {
+        }catch (\Exception $e) {
             throw $e;
         }
     }
@@ -160,7 +160,7 @@ class RestClient {
         $strResponse = curl_exec($ch);
         $curlErrno = curl_errno($ch);
         if ($curlErrno) {
-            throw new Exception($curlErrno);
+            throw new \Exception($curlErrno);
         } else {
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             $array = array (
@@ -175,10 +175,10 @@ class RestClient {
                 print ("EV access token expired");
                 print($strResponse);
             }else{
-                throw new Exception($strResponse);
+                throw new \Exception($strResponse);
             }
         }
-      }catch (Exception $e) {
+      }catch (\Exception $e) {
           throw $e;
       }
     }
@@ -229,7 +229,7 @@ class RestClient {
             );
             file_put_contents(self::RC_TOKEN_FILE, json_encode($tokensObj, JSON_PRETTY_PRINT));
             return $jsonObj->access_token;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw $e;
         }
     }
@@ -244,7 +244,7 @@ class RestClient {
           $this->accountId = $jsonObj->accounts[0]->accountId;
           $this->__readPermanentsToken($jsonObj->authToken);
           return $jsonObj;
-      }catch (Exception $e) {
+      }catch (\Exception $e) {
           throw $e;
       }
     }
@@ -261,7 +261,7 @@ class RestClient {
         }else{
             $this->__generatePermanentToken($authToken);
         }
-      }catch (Exception $e){
+      }catch (\Exception $e){
           throw $e;
       }
     }
@@ -272,7 +272,7 @@ class RestClient {
         try{
             $resp = $this->__post($url, $headers);
             $this->accessToken = $resp['body'];
-        }catch (Exception $e) {
+        }catch (\Exception $e) {
             throw $e;
         }
     }
@@ -309,7 +309,7 @@ class RestClient {
           $strResponse = curl_exec($ch);
           $curlErrno = curl_errno($ch);
           if ($curlErrno) {
-              throw new Exception($ecurlError);
+              throw new \Exception($ecurlError);
           } else {
               $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
               $array = array (
@@ -321,11 +321,11 @@ class RestClient {
               if ($httpCode == 200) {
                   return $array;
               }else{
-                  throw new Exception($strResponse);
+                  throw new \Exception($strResponse);
               }
           }
 
-      } catch (Exception $e) {
+      } catch (\Exception $e) {
           throw $e;
       }
     }
