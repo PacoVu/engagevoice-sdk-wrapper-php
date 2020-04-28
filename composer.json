@@ -16,6 +16,5 @@
     },
     "autoload": {
         "psr-4": {"pacovu\\engagevoice\\": "src/"}
-    },
-    "require": {}
+    }
 }
