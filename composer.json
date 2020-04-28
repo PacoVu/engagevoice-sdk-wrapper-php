@@ -5,7 +5,7 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "PacoVu",
+            "name": "Paco Vu",
             "email": "paco_vu@yahoo.com"
         }
     ],
@@ -14,7 +14,6 @@
       "ext-json": "*",
       "php": ">=7.1"
     },
-    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {"pacovu\\engagevoice\\": "src/"}
     }
