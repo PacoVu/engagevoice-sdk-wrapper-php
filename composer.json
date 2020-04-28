@@ -1,5 +1,5 @@
 {
-    "name": "ringcentral/engagevoice-sdk-wrapper",
+    "name": "pacovu/engagevoice-sdk-wrapper",
     "description": "RingCentral Engage Voice SDK wrapper for PHP",
     "type": "library",
     "license": "MIT",
