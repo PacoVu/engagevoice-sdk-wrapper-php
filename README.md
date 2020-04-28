@@ -56,44 +56,20 @@ var ev = new EngageVoice.RestClient(RINGCENTRAL_CLIENT_ID, RINGCENTRAL_CLIENT_SE
 ```
 # Login with RingCentral Office user credentials.
 
-var ev = new EngageVoice.RestClient(RINGCENTRAL_CLIENT_ID, process.env.RINGCENTRAL_CLIENT_SECRET)
-ev.login(RC_USERNAME, RC_PASSWORD, RC_EXTENSION, function(err, response){
-    if (err)
-      console.log(err)
-    else{
-      console.log(response)
-    }
-})
+$ev = new engagevoice\RestClient(RC_CLIENT_ID, RC_CLIENT_SECRET);
 
-function list_account_agent_groups() {
-  var endpoint = 'admin/accounts/~/agentGroups'
-  ev.get(endpoint, null, function(err, response){
-      if (err)
-          console.log(err)
-      else {
-          var jsonObj = JSON.parse(response)
-          console.log(jsonObj)
-          console.log("===========")
-      }
-  })
-}
+$ev->login(RC_USERNAME, RC_PASSWORD, RC_EXTENSION, function($response){
 
 # Login with Legacy user credentials
 
-var ev = new EngageVoice.RestClient("", "", "Legacy")
-ev.login(RC_USERNAME, RC_PASSWORD, "", function(err, response){
-    if (err)
-      console.log(err)
-    else{
-      console.log(response)
-    }
-})
+$ev = new engagevoice\RestClient(null, null, "Legacy");
 
+$ev->login(USERNAME, PASSWORD);
 ```
 
 **Function get**
 ```
-get(endpoint, params, callback)
+get($endpoint, $params, "callback");
 ```
 *Description:*
 * Send an HTTP GET request to Engage Voice server.
@@ -110,21 +86,18 @@ API response in JSON object
 ```
 # Read account info.
 
-var endpoint = "admin/accounts"
-ev.get(endpoint, null, function(err, response){
-    if (err){
-        console.log(err)
-    }else {
-        var jsonObj = JSON.parse(response)
-        console.log(jsonObj)
-        console.log("===========")
-    }
-})
+$endpoint = "admin/accounts";
+try{
+    $resp = $ev->get($endpoint);
+    print ($resp);
+}catch (Exception $e) {
+    print $e->getMessage();
+}
 ```
 
 **Function post**
 ```
-post(endpoint, params, callback)
+post($endpoint, $params, "callback");
 ```
 *Description:*
 * Sends an HTTP POST request to Engage Voice server.
@@ -142,17 +115,14 @@ API response in JSON object
 ```
 # Search for campaign leads.
 
-var endpoint = "admin/accounts/~/campaignLeads/leadSearch"
-var params = { 'firstName': "Larry" }
-ev.post(endpoint, params, function(err, response){
-    if (err){
-        console.log(err)
-    }else {
-        var jsonObj = JSON.parse(response)
-        console.log(jsonObj)
-        console.log("===========")
-    }
-})
+$endpoint = "admin/accounts/~/campaignLeads/leadSearch";
+$params = array ( 'firstName' => "Larry" );
+try{
+    $resp = $ev->post($endpoint, $params);
+    print ($resp);
+}catch (Exception $e) {
+    print $e->getMessage();
+}
 ```
 ## License
 Licensed under the MIT License.
