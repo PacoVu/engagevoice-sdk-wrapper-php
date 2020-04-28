@@ -10,6 +10,7 @@
         }
     ],
     "require": {
+      "pacovu/engagevoice-sdk-wrapper": "dev-master",
       "ext-curl": "*",
       "ext-json": "*",
       "php": ">=7.1"
