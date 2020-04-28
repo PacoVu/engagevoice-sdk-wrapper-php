@@ -123,8 +123,6 @@ class RestClient {
             $body = array();
             if ($params != null)
                 $body = json_encode($params);
-            print ($url."\r\n");
-            print ($body."\r\n");
             $headers = array (
                   'Content-Type: application/json',
                   'Accept: application/json, text/plain, */*',
@@ -198,12 +196,12 @@ class RestClient {
               'password' => $password
             ));
         else
-        $body = http_build_query(array (
-            'grant_type' => 'password',
-            'username' => urlencode($username),
-            'password' => $password,
-            'extension' => $extension
-          ));
+          $body = http_build_query(array (
+              'grant_type' => 'password',
+              'username' => urlencode($username),
+              'password' => $password,
+              'extension' => $extension
+            ));
 
         if (file_exists(self::RC_TOKEN_FILE)){
             $saved_tokens = file_get_contents(self::RC_TOKEN_FILE);
