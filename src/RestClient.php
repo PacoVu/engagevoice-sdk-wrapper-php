@@ -92,7 +92,6 @@ class RestClient {
             $endpoint = preg_replace('/~/', $this->getAccountId(), $endpoint);
         }
         $url = $this->server . $endpoint;
-        print ($url."\r\n");
         if ($params != null)
             $url .= "?".http_build_query($params);
 
