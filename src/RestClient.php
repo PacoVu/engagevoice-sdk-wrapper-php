@@ -323,7 +323,7 @@ class RestClient {
         }
     }
 
-    private function exchangeAccessTokens($rcAccessToken, $callback=null){
+    private function exchangeAccessTokens($rcAccessToken){
         $url = self::EV_SERVER_URL . "/api/auth/login/rc/accesstoken?";
         $body = 'rcAccessToken='.$rcAccessToken."&rcTokenType=Bearer";
         $headers = array (
@@ -336,9 +336,9 @@ class RestClient {
               $this->accessToken = $tokensObj->accessToken;
               $this->accountInfo = $tokensObj->agentDetails;
               $this->accountId = $tokensObj->agentDetails[0]->accountId;
-              return ($callback == null) ? $tokensObj : $callback($resp);
+              return $resp;
             }else{
-              return ($callback == null) ? $resp : $callback($resp);
+              return null;
             }
         }catch (\Exception $e) {
             throw $e;
