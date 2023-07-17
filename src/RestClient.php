@@ -1,6 +1,8 @@
 <?php
 namespace EngageVoiceSDKWrapper;
 
+class WrapperException extends \Exception { }
+
 class RestClient {
     const RC_TOKEN_FILE = "rc_tokens.txt";
 
@@ -44,24 +46,38 @@ class RestClient {
         $this->readAccount();
         return ($callback == null) ? $this->accountInfo : $callback($this->accountInfo);
     }
-    public function login($username, $password, $extension=null, $callback=null) {
-        if ($this->mode == "Engage"){
-            $rcAccessToken = $this->rcLogin($username, $password, $extension);
-            $resp = $this->exchangeAccessTokens($rcAccessToken);
-            if ($resp)
-              return ($callback == null) ? json_decode($resp['body']) : $callback($resp);
-            else
-              return ($callback == null) ? $resp : $callback($resp);
-        }else{
-          if ($this->accessToken != null){
-              return ($callback == null) ? $this->accessToken : $callback($this->accessToken);
+    public function login($options, $callback=null) {
+      if ($this->mode == "Engage"){
+          if (is_string($options)) {
+              $username = func_get_arg(0);
+              $password = func_get_arg(1);
+              $extension = func_get_arg(2) ? func_get_arg(2) : "";
+              $rcAccessToken = $this->rcLogin($username, $password, $extension);
+          }else if (!empty($options['jwt'])){
+              $rcAccessToken = $this->rcLoginJwt($options['jwt']);
           }else{
-              $this->generateAuthToken($username, $password);
-              return ($callback == null) ? $this->accessToken : $callback($this->accessToken);
+            $rcAccessToken = $this->rcLogin($options['username'], $options['password'], $options['extension']);
           }
+          $resp = $this->exchangeAccessTokens($rcAccessToken);
+          if ($resp)
+            return ($callback == null) ? json_decode($resp['body']) : $callback($resp);
+          else
+            return ($callback == null) ? $resp : $callback($resp);
+      }else{
+        if ($this->accessToken != null){
+            return ($callback == null) ? $this->accessToken : $callback($this->accessToken);
+        }else{
+          if (is_string($options)) {
+              $username = func_get_arg(0);
+              $password = func_get_arg(1);
+              $this->generateAuthToken($username, $password);
+          }else{
+              $this->generateAuthToken($options["username"], $options["password"]);
+          }
+          return ($callback == null) ? $this->accessToken : $callback($this->accessToken);
         }
+      }
     }
-
     public function get($endpoint, $params=null, $callback=""){
         if ($this->accessToken == null){
             return ($callback == "") ? "Login required!" : $callback("Login required!");
@@ -246,6 +262,56 @@ class RestClient {
                 'password' => $password,
                 'extension' => $extension
               ));
+
+          if (file_exists(self::RC_TOKEN_FILE)){
+              $saved_tokens = file_get_contents(self::RC_TOKEN_FILE);
+              $tokensObj = json_decode($saved_tokens);
+              $date = new \DateTime();
+              $expire_time= $date->getTimestamp() - $tokensObj->timestamp;
+              if ($expire_time < $tokensObj->tokens->expires_in){
+                return $tokensObj->tokens->access_token;
+              }else if ($expire_time <  $tokensObj->tokens->refresh_token_expires_in) {
+                  $body = http_build_query(array (
+                    'grant_type' => 'refresh_token',
+                    'refresh_token' => $tokensObj->tokens->refresh_token
+                  ));
+              }
+          }
+          try {
+              $resp = $this->sendRequest('POST', $url, $headers, $body);
+              if ($resp){
+                  $date = new \DateTime();
+                  $jsonObj = json_decode($resp['body']);
+                  $tokensObj = array(
+                    "tokens" => $jsonObj,
+                    "timestamp" => $date->getTimestamp()
+                  );
+                  file_put_contents(self::RC_TOKEN_FILE, json_encode($tokensObj, JSON_PRETTY_PRINT));
+                  return $jsonObj->access_token;
+              }else{
+                return null;
+              }
+          } catch (\Exception $e) {
+              throw $e;
+          }
+        }
+    }
+    private function rcLoginJWT($jwt){
+        $rcAccessToken = $this->checkSavedTokens();
+        if ($rcAccessToken != null){
+            return $rcAccessToken;
+        }else{ // login RC
+          $url = self::RC_SERVER_URL."/restapi/oauth/token";
+          $basic = $this->clientId .":". $this->clientSecret;
+          $headers = array (
+              'Content-Type: application/x-www-form-urlencoded; charset=UTF-8',
+              'Accept: application/json',
+              'Authorization: Basic '.base64_encode($basic)
+            );
+          $body = http_build_query(array (
+              'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+              'assertion' => $jwt
+            ));
 
           if (file_exists(self::RC_TOKEN_FILE)){
               $saved_tokens = file_get_contents(self::RC_TOKEN_FILE);
