@@ -1,8 +1,6 @@
 <?php
 namespace EngageVoiceSDKWrapper;
 
-class WrapperException extends \Exception { }
-
 class RestClient {
     const RC_TOKEN_FILE = "rc_tokens.txt";
 
@@ -40,7 +38,6 @@ class RestClient {
     public function getAccountId() {
       return $this->accountId;
     }
-
     function setAccessToken($accessToken, $callback=null){
         $this->accessToken = $accessToken;
         $this->readAccount();
